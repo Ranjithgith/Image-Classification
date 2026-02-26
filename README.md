@@ -6,49 +6,80 @@ To Develop a convolutional deep neural network for image classification and to v
 
 ## Problem Statement and Dataset
 
-Include the Problem Statement and Dataset.
+The objective of this project is to create a CNN that can categorize images of fashion items from the Fashion MNIST dataset. This dataset includes grayscale images of clothing and accessories such as T-shirts, trousers, dresses, and footwear. The task is to accurately predict the correct category for each image while ensuring the model is efficient and robust.
+
 
 ## Neural Network Model
 
-Include the neural network model diagram.
+<img width="1037" height="406" alt="image" src="https://github.com/user-attachments/assets/60881028-0fc5-41af-8e76-2ef55e94f1b2" />
 
 ## DESIGN STEPS
 
+
 ### STEP 1:
-Write your own steps
+Import the necessary libraries such as NumPy, Matplotlib, and PyTorch.
 
 ### STEP 2:
+Load and preprocess the dataset:
+
+Resize images to a fixed size (128×128). Normalize pixel values to a range between 0 and 1. Convert labels into numerical format if necessary.
 
 ### STEP 3:
+Define the CNN Architecture, which includes:
 
+Input Layer: Shape (8,128,128) Convolutional Layer 1: 8 filters, kernel size (16×16), ReLU activation Max-Pooling Layer 1: Pool size (2×2) Convolutional Layer 2: 24 filters, kernel size (8×8), ReLU activation Max-Pooling Layer 2: Pool size (2×2) Fully Connected (Dense) Layer: First Dense Layer with 256 neurons Second Dense Layer with 128 neurons Output Layer for classification
+
+### STEP 4:
+Define the loss function (e.g., Cross-Entropy Loss for classification) and optimizer (e.g., Adam or SGD).
+
+### STEP 5:
+Train the model by passing training data through the network, calculating the loss, and updating the weights using backpropagation.
+
+### STEP 6:
+Evaluate the trained model on the test dataset using accuracy, confusion matrix, and other performance metrics.
+
+### STEP 7:
+Make predictions on new images and analyze the results.
 
 ## PROGRAM
 
-### Name:
-### Register Number:
+### Name: RANJIT R
+### Register Number: 212224240131
 ```python
 class CNNClassifier(nn.Module):
     def __init__(self):
         super(CNNClassifier, self).__init__()
         # write your code here
-
-
-
-
+        self.conv1 = nn.Conv2d(in_channels=1, out_channels=16, kernel_size=3, padding=1)
+        self.conv2 = nn.Conv2d(in_channels=16, out_channels=32, kernel_size=3, padding=1)
+        self.conv3 = nn.Conv2d(in_channels=32, out_channels=64, kernel_size=3, padding=1)
+        self.conv4 = nn.Conv2d(in_channels=64, out_channels=128, kernel_size=3, padding=1)
+        self.pool = nn.AvgPool2d(kernel_size=2, stride=2)
+        self.fc1 = nn.Linear(128*3*3, 256)
+        self.fc2 = nn.Linear(256,128)
+        self.fc3 = nn.Linear(128,64)
+        self.fc4 = nn.Linear(64,10)
 
     def forward(self, x):
         # write your code here
-
-
+        x = self.pool(torch.relu(self.conv1(x)))
+        x = self.pool(torch.relu(self.conv2(x)))
+        x = self.pool(torch.relu(self.conv3(x)))
+        x = torch.relu(self.conv4(x)) # Removed the last pooling layer
+        x = x.view(x.size(0), -1)
+        x = torch.relu(self.fc1(x))
+        x = torch.relu(self.fc2(x))
+        x = torch.relu(self.fc3(x))
+        x = self.fc4(x)
+        return x
 
 ```
 
 ```python
-# Initialize the Model, Loss Function, and Optimizer
-model =
-criterion =
-optimizer =
-
+# Initialize model, loss function, and optimizer
+model = CNNClassifier()
+criterion = nn.CrossEntropyLoss()
+optimizer = optim.Adam(model.parameters(), lr=0.001)
 ```
 
 ```python
@@ -56,33 +87,43 @@ optimizer =
 def train_model(model, train_loader, num_epochs=3):
 
     # write your code here
+    print('Name: RANJIT R')
+    print('Register Number: 212224240131')
+    for epoch in range(num_epochs):
+        model.train()
+        running_loss = 0.0
+        for images, labels in train_loader:
+            optimizer.zero_grad()
+            outputs = model(images)
+            loss = criterion(outputs, labels)
+            loss.backward()
+            optimizer.step()
+            running_loss += loss.item()
 
-        
-        
-        
-        print('Name:        ')
-        print('Register Number:       ')
+
         print(f'Epoch [{epoch+1}/{num_epochs}], Loss: {running_loss/len(train_loader):.4f}')
 
 ```
-
 ## OUTPUT
 ### Training Loss per Epoch
+<img width="373" height="65" alt="image" src="https://github.com/user-attachments/assets/1f5efa65-9a10-44f0-bf22-9576e2785a31" />
 
-Include the Training Loss per epoch
+
 
 ### Confusion Matrix
-
-Include confusion matrix here
+<img width="958" height="840" alt="image" src="https://github.com/user-attachments/assets/220194b4-4d09-43fc-a386-55978f98b103" />
 
 ### Classification Report
+<img width="729" height="445" alt="image" src="https://github.com/user-attachments/assets/66c3944c-080a-4481-b87e-e493ca067a74" />
 
-Include Classification Report here
 
 
 ### New Sample Data Prediction
 
-Include your sample input and output 
+
+<img width="615" height="629" alt="image" src="https://github.com/user-attachments/assets/e7d6b80a-aab9-47b0-a4fb-b153b41c4215" />
+
 
 ## RESULT
-Include your result here.
+
+Thus the development of a convolutional deep neural network for image classification is executed successfully.
